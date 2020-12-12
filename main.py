@@ -1,4 +1,5 @@
 import pygame
+import random 
 
 #This initializes pygame
 pygame.init()
@@ -32,12 +33,12 @@ playerY_movement = 0
 enemy_image = pygame.image.load('ufo.png')
 
 #Enemy coordinates when the game starts up
-enemyX = 370
-enemyY = 50
+enemyX = random.randint(0,width)
+enemyY = random.randint(50,150)
 
 #These variables will be used to deal with the movement of the enemy.
-enemyX_movement = 0
-enemyY_movement = 0
+enemyX_movement = 0.3
+enemyY_movement = 40
 #Function that will be executed to edit where the player's position is.
 def player(x,y):
     new_screen.blit(player_image,(x,y))
@@ -68,9 +69,10 @@ while game_running:
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
                 playerX_movement = 0
-
+    #From the if statements above, this line below will be the guiding factor for where the player ends up based on their keystrokes.
     playerX += playerX_movement
 
+#These two if statements provide the boundaries for the player's character.
     if playerX <= 0:
         playerX = 0
     if playerX > width - 64:
@@ -81,5 +83,16 @@ while game_running:
     
     #screen.fill always needs to be above the call to the player function so that it acts as the background, and is not in front of the player's character.
     player(playerX,playerY)
+
+
+    #### Enemy Movement Below
+    enemyX += enemyX_movement
+
+    if enemyX <= 0:
+        enemyX_movement = 0.3 #We want the enemy to go the opposite direction in terms of the x - axis when it hits a boundary.
+        enemyY += enemyY_movement
+    if enemyX > width - 64:
+        enemyX_movement = -0.3 #We want the enemy to go the opposite direction in terms of the x - axis when it hits a boundary.
+        enemyY += enemyY_movement
     enemy(enemyX,enemyY)
     pygame.display.update()
