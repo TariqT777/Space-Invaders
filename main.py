@@ -11,6 +11,9 @@ height = 600
 #This creates the game screen
 new_screen = pygame.display.set_mode((width,height))
 
+#Background
+background = pygame.image.load('Galaxy-Background.jpg')
+
 #Below will be the code for the title of the game window that will be seen by the user as well as the Space Invaders icon (well the one that I am choosing to use).
 pygame.display.set_caption("Space Invaders")
 icon = pygame.image.load('launch.png')
@@ -37,7 +40,7 @@ enemyX = random.randint(0,width)
 enemyY = random.randint(50,150)
 
 #These variables will be used to deal with the movement of the enemy.
-enemyX_movement = 0.3
+enemyX_movement = .5
 enemyY_movement = 40
 #Function that will be executed to edit where the player's position is.
 def player(x,y):
@@ -55,6 +58,9 @@ while game_running:
     #This will work for background, the three values are the RGB colors
     new_screen.fill ((0,0,0))
 
+    #Background Image. Needs to be below the screen.fill.
+    new_screen.blit(background, (0,0))
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             game_running = False
@@ -62,9 +68,9 @@ while game_running:
         #This will check if a keystroke is being pressed and which key it is that is being pressed.
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
-                playerX_movement = -0.3
+                playerX_movement = -1
             if event.key == pygame.K_RIGHT:
-                playerX_movement = 0.3
+                playerX_movement = 1
         
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
@@ -89,10 +95,12 @@ while game_running:
     enemyX += enemyX_movement
 
     if enemyX <= 0:
-        enemyX_movement = 0.3 #We want the enemy to go the opposite direction in terms of the x - axis when it hits a boundary.
+        enemyX_movement = .5 #We want the enemy to go the opposite direction in terms of the x - axis when it hits a boundary.
         enemyY += enemyY_movement
     if enemyX > width - 64:
-        enemyX_movement = -0.3 #We want the enemy to go the opposite direction in terms of the x - axis when it hits a boundary.
+        enemyX_movement = -.5 #We want the enemy to go the opposite direction in terms of the x - axis when it hits a boundary.
         enemyY += enemyY_movement
     enemy(enemyX,enemyY)
+    
+    
     pygame.display.update()
