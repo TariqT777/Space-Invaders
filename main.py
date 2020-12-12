@@ -23,3 +23,7 @@ while game_running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             game_running = False
+    
+    #This will work for background, the three values are the RGB colors
+    new_screen.fill ((0,0,0))
+    pygame.display.update()
