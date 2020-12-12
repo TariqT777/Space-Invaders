@@ -43,11 +43,35 @@ enemyY = random.randint(50,150)
 enemyX_movement = .5
 enemyY_movement = 40
 #Function that will be executed to edit where the player's position is.
+
+#Laser
+laser_image = pygame.image.load('laser.png')
+
+
+laserX = 0
+laserY = 480
+
+
+laserX_movement = 0
+laserY_movement = .4
+
+#Ready means that you can't see the laser on the screen.
+#Fire means that the laser is currently moving and is visible.
+laser_state = "ready"
+
+
 def player(x,y):
     new_screen.blit(player_image,(x,y))
 
 def enemy(x,y):
     new_screen.blit(enemy_image,(x,y))
+
+def fire_laser(x,y):
+    global laser_state 
+    laser_state = 'fire'
+    #The '+ 16' will allow the bullet to appear from the center of the spaceship and the '+10' will allow the bullet to appear from the top of the nose of the ship.
+    new_screen.blit(laser_image,(x + 16, y + 10))
+
 
 
 #Infinite Loop that houses the 'Events' in the game window.
@@ -71,6 +95,8 @@ while game_running:
                 playerX_movement = -1
             if event.key == pygame.K_RIGHT:
                 playerX_movement = 1
+            if event.key == pygame.K_SPACE:
+                fire_laser(playerX,laserY)
         
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
@@ -87,6 +113,11 @@ while game_running:
     #This subtraction of 64 from the width allows us to alway see the whole ship, and if we were to remove the 64,
     #We would then have our ship still partially leaving the screen.
     
+    #Laser Movement
+    if laser_state is 'fire' :
+        fire_laser(playerX,laserY)
+        laserY -= laserY_movement
+
     #screen.fill always needs to be above the call to the player function so that it acts as the background, and is not in front of the player's character.
     player(playerX,playerY)
 
