@@ -1,4 +1,5 @@
 import pygame
+import random 
 
 #This initializes pygame
 pygame.init()
@@ -32,8 +33,8 @@ playerY_movement = 0
 enemy_image = pygame.image.load('ufo.png')
 
 #Enemy coordinates when the game starts up
-enemyX = 370
-enemyY = 50
+enemyX = random.randint(0,width)
+enemyY = random.randint(50,150)
 
 #These variables will be used to deal with the movement of the enemy.
 enemyX_movement = 0
