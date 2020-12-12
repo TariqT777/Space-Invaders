@@ -57,6 +57,14 @@ while game_running:
                 playerX_movement = 0
 
     playerX += playerX_movement
+
+    if playerX <= 0:
+        playerX = 0
+    if playerX > width - 64:
+        playerX = width - 64
+    #We do width - 64 here because the size of the image that we downloaded to use as this piece was of size 64 px.
+    #This subtraction of 64 from the width allows us to alway see the whole ship, and if we were to remove the 64,
+    #We would then have our ship still partially leaving the screen.
     
     #screen.fill always needs to be above the call to the player function so that it acts as the background, and is not in front of the player's character.
     player(playerX,playerY)
