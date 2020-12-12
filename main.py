@@ -11,6 +11,9 @@ height = 600
 #This creates the game screen
 new_screen = pygame.display.set_mode((width,height))
 
+#Background
+background = pygame.image.load('Galaxy-Background.jpg')
+
 #Below will be the code for the title of the game window that will be seen by the user as well as the Space Invaders icon (well the one that I am choosing to use).
 pygame.display.set_caption("Space Invaders")
 icon = pygame.image.load('launch.png')
@@ -37,14 +40,38 @@ enemyX = random.randint(0,width)
 enemyY = random.randint(50,150)
 
 #These variables will be used to deal with the movement of the enemy.
-enemyX_movement = 0.3
+enemyX_movement = .5
 enemyY_movement = 40
 #Function that will be executed to edit where the player's position is.
+
+#Laser
+laser_image = pygame.image.load('laser.png')
+
+
+laserX = 0
+laserY = 480
+
+
+laserX_movement = 0
+laserY_movement = .4
+
+#Ready means that you can't see the laser on the screen.
+#Fire means that the laser is currently moving and is visible.
+laser_state = "ready"
+
+
 def player(x,y):
     new_screen.blit(player_image,(x,y))
 
 def enemy(x,y):
     new_screen.blit(enemy_image,(x,y))
+
+def fire_laser(x,y):
+    global laser_state 
+    laser_state = 'fire'
+    #The '+ 16' will allow the bullet to appear from the center of the spaceship and the '+10' will allow the bullet to appear from the top of the nose of the ship.
+    new_screen.blit(laser_image,(x + 16, y + 10))
+
 
 
 #Infinite Loop that houses the 'Events' in the game window.
@@ -55,6 +82,9 @@ while game_running:
     #This will work for background, the three values are the RGB colors
     new_screen.fill ((0,0,0))
 
+    #Background Image. Needs to be below the screen.fill.
+    new_screen.blit(background, (0,0))
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             game_running = False
@@ -62,9 +92,11 @@ while game_running:
         #This will check if a keystroke is being pressed and which key it is that is being pressed.
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
-                playerX_movement = -0.3
+                playerX_movement = -1
             if event.key == pygame.K_RIGHT:
-                playerX_movement = 0.3
+                playerX_movement = 1
+            if event.key == pygame.K_SPACE:
+                fire_laser(playerX,laserY)
         
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
@@ -81,6 +113,11 @@ while game_running:
     #This subtraction of 64 from the width allows us to alway see the whole ship, and if we were to remove the 64,
     #We would then have our ship still partially leaving the screen.
     
+    #Laser Movement
+    if laser_state is 'fire' :
+        fire_laser(playerX,laserY)
+        laserY -= laserY_movement
+
     #screen.fill always needs to be above the call to the player function so that it acts as the background, and is not in front of the player's character.
     player(playerX,playerY)
 
@@ -89,10 +126,12 @@ while game_running:
     enemyX += enemyX_movement
 
     if enemyX <= 0:
-        enemyX_movement = 0.3 #We want the enemy to go the opposite direction in terms of the x - axis when it hits a boundary.
+        enemyX_movement = .5 #We want the enemy to go the opposite direction in terms of the x - axis when it hits a boundary.
         enemyY += enemyY_movement
     if enemyX > width - 64:
-        enemyX_movement = -0.3 #We want the enemy to go the opposite direction in terms of the x - axis when it hits a boundary.
+        enemyX_movement = -.5 #We want the enemy to go the opposite direction in terms of the x - axis when it hits a boundary.
         enemyY += enemyY_movement
     enemy(enemyX,enemyY)
+    
+    
     pygame.display.update()
