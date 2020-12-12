@@ -24,21 +24,40 @@ player_image = pygame.image.load('player-ship.png')
 playerX = 370
 playerY = 480
 
-def player():
-    new_screen.blit(player_image,(playerX,playerY))
+#These variables will be used to deal with the key presses and therefore the movement of the player;.
+playerX_movement = 0
+playerY_movement = 0
+
+#Function that will be executed to edit where the player's position is.
+def player(x,y):
+    new_screen.blit(player_image,(x,y))
 
 
 #Infinite Loop that houses the 'Events' in the game window.
 # Also allows the window to close when the x is pressed. 
 game_running = True
 while game_running:
+
+    #This will work for background, the three values are the RGB colors
+    new_screen.fill ((0,0,0))
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             game_running = False
     
-    #This will work for background, the three values are the RGB colors
-    new_screen.fill ((0,0,0))
+        #This will check if a keystroke is being pressed and which key it is that is being pressed.
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_LEFT:
+                playerX_movement = -0.3
+            if event.key == pygame.K_RIGHT:
+                playerX_movement = 0.3
+        
+        if event.type == pygame.KEYUP:
+            if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
+                playerX_movement = 0
+
+    playerX += playerX_movement
     
-    #screen.fill always needs to be above the player so that it acts as the background, and is not in front of the player's character.
-    player()
+    #screen.fill always needs to be above the call to the player function so that it acts as the background, and is not in front of the player's character.
+    player(playerX,playerY)
     pygame.display.update()
