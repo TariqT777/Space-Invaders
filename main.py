@@ -96,7 +96,10 @@ while game_running:
             if event.key == pygame.K_RIGHT:
                 playerX_movement = 1
             if event.key == pygame.K_SPACE:
-                fire_laser(playerX,laserY)
+                if laser_state is 'ready':
+                    #Gets the current x coordinate of the player
+                    laserX = playerX
+                    fire_laser(laserX,laserY)
         
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
@@ -117,9 +120,9 @@ while game_running:
     if laserY <= 0 :
         laserY = 480
         laser_state = 'ready'
-        
+
     if laser_state is 'fire' :
-        fire_laser(playerX,laserY)
+        fire_laser(laserX,laserY) #If this statement isn't hear, the laser won't appear.
         laserY -= laserY_movement
 
     #screen.fill always needs to be above the call to the player function so that it acts as the background, and is not in front of the player's character.
