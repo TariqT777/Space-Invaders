@@ -114,6 +114,10 @@ while game_running:
     #We would then have our ship still partially leaving the screen.
     
     #Laser Movement
+    if laserY <= 0 :
+        laserY = 480
+        laser_state = 'ready'
+        
     if laser_state is 'fire' :
         fire_laser(playerX,laserY)
         laserY -= laserY_movement
