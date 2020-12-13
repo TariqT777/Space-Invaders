@@ -1,5 +1,6 @@
 import pygame
 import random 
+import math
 
 #This initializes pygame
 pygame.init()
@@ -59,6 +60,7 @@ laserY_movement = .4
 #Fire means that the laser is currently moving and is visible.
 laser_state = "ready"
 
+score = 0 #We initialize the player's score here.
 
 def player(x,y):
     new_screen.blit(player_image,(x,y))
@@ -72,6 +74,13 @@ def fire_laser(x,y):
     #The '+ 16' will allow the bullet to appear from the center of the spaceship and the '+10' will allow the bullet to appear from the top of the nose of the ship.
     new_screen.blit(laser_image,(x + 16, y + 10))
 
+#Function below will allow for collison 
+#We will be using the distance formula to help us here
+
+def isCollision(enemyX,enemyY,laserX,laserY):
+    distance = math.sqrt(math.pow(enemyX-laserX,2) + (math.pow(enemyY-laserY,2)))
+    if distance < 27 : #The 27 stands for 27 px
+        return True
 
 
 #Infinite Loop that houses the 'Events' in the game window.
@@ -124,6 +133,14 @@ while game_running:
     if laser_state is 'fire' :
         fire_laser(laserX,laserY) #If this statement isn't hear, the laser won't appear.
         laserY -= laserY_movement
+
+    #Collision 
+    collision = isCollision(enemyX,enemyY,laserX,laserY)
+    if collision : #Means if the collision function returns true
+        laserY = 480
+        laser_state = 'ready'
+        score += 1
+        print(score)
 
     #screen.fill always needs to be above the call to the player function so that it acts as the background, and is not in front of the player's character.
     player(playerX,playerY)
