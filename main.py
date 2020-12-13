@@ -37,7 +37,7 @@ playerY_movement = 0
 enemy_image = pygame.image.load('ufo.png')
 
 #Enemy coordinates when the game starts up
-enemyX = random.randint(0,width)
+enemyX = random.randint(0,width - 65)
 enemyY = random.randint(50,150)
 
 #These variables will be used to deal with the movement of the enemy.
@@ -141,6 +141,8 @@ while game_running:
         laser_state = 'ready'
         score += 1
         print(score)
+        enemyX = random.randint(0,width - 65)
+        enemyY = random.randint(50,150)
 
     #screen.fill always needs to be above the call to the player function so that it acts as the background, and is not in front of the player's character.
     player(playerX,playerY)
