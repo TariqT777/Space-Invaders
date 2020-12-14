@@ -33,17 +33,27 @@ playerY = 480
 playerX_movement = 0
 playerY_movement = 0
 
+#Enemy
 
-enemy_image = pygame.image.load('ufo.png')
+enemy_image = []
+enemyX = []
+enemyY = []
+enemyX_movement = []
+enemyY_movement = []
+num_of_enemies = 6
 
-#Enemy coordinates when the game starts up
-enemyX = random.randint(0,width - 65)
-enemyY = random.randint(50,150)
 
-#These variables will be used to deal with the movement of the enemy.
-enemyX_movement = .5
-enemyY_movement = 40
-#Function that will be executed to edit where the player's position is.
+for i in range(num_of_enemies):
+    enemy_image.append(pygame.image.load('ufo.png'))
+
+    #Enemy coordinates when the game starts up
+    enemyX.append(random.randint(0,width - 65))
+    enemyY.append(random.randint(50,150))
+
+    #These variables will be used to deal with the movement of the enemy.
+    enemyX_movement.append(.5)
+    enemyY_movement.append(40)
+    #Function that will be executed to edit where the player's position is.
 
 #Laser
 laser_image = pygame.image.load('laser.png')
@@ -65,8 +75,8 @@ score = 0 #We initialize the player's score here.
 def player(x,y):
     new_screen.blit(player_image,(x,y))
 
-def enemy(x,y):
-    new_screen.blit(enemy_image,(x,y))
+def enemy(x,y,i):
+    new_screen.blit(enemy_image[i],(x,y))
 
 def fire_laser(x,y):
     global laser_state 
@@ -134,30 +144,32 @@ while game_running:
         fire_laser(laserX,laserY) #If this statement isn't hear, the laser won't appear.
         laserY -= laserY_movement
 
-    #Collision 
-    collision = isCollision(enemyX,enemyY,laserX,laserY)
-    if collision : #Means if the collision function returns true
-        laserY = 480
-        laser_state = 'ready'
-        score += 1
-        print(score)
-        enemyX = random.randint(0,width - 65)
-        enemyY = random.randint(50,150)
+    
 
     #screen.fill always needs to be above the call to the player function so that it acts as the background, and is not in front of the player's character.
     player(playerX,playerY)
 
 
     #### Enemy Movement Below
-    enemyX += enemyX_movement
+    for i in range(num_of_enemies):
+        enemyX[i] += enemyX_movement[i]
 
-    if enemyX <= 0:
-        enemyX_movement = .5 #We want the enemy to go the opposite direction in terms of the x - axis when it hits a boundary.
-        enemyY += enemyY_movement
-    if enemyX > width - 64:
-        enemyX_movement = -.5 #We want the enemy to go the opposite direction in terms of the x - axis when it hits a boundary.
-        enemyY += enemyY_movement
-    enemy(enemyX,enemyY)
-    
+        if enemyX[i] <= 0:
+            enemyX_movement[i] = .5 #We want the enemy to go the opposite direction in terms of the x - axis when it hits a boundary.
+            enemyY[i] += enemyY_movement[i]
+        if enemyX[i] > width - 64:
+            enemyX_movement[i] = -.5 #We want the enemy to go the opposite direction in terms of the x - axis when it hits a boundary.
+            enemyY[i] += enemyY_movement[i]
+        enemy(enemyX[i],enemyY[i],i)
+
+        #Collision 
+        collision = isCollision(enemyX[i],enemyY[i],laserX,laserY)
+        if collision : #Means if the collision function returns true
+            laserY = 480
+            laser_state = 'ready'
+            score += 1
+            print(score)
+            enemyX[i] = random.randint(0,width - 65)
+            enemyY[i] = random.randint(50,150)
     
     pygame.display.update()
