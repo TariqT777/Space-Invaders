@@ -70,7 +70,17 @@ laserY_movement = .4
 #Fire means that the laser is currently moving and is visible.
 laser_state = "ready"
 
-score = 0 #We initialize the player's score here.
+
+#Score Section
+score_value = 0
+#Text font and x,y coordinates
+text_font = pygame.font.Font('freesansbold.ttf',32)
+textX = 10
+textY = 10
+
+def show_score(x,y) :
+    visible_score = text_font.render("Score : " + str(score_value),True, (255,255,255))
+    new_screen.blit(visible_score, (x, y))
 
 def player(x,y):
     new_screen.blit(player_image,(x,y))
@@ -167,9 +177,11 @@ while game_running:
         if collision : #Means if the collision function returns true
             laserY = 480
             laser_state = 'ready'
-            score += 1
-            print(score)
+            score_value += 1
+            print(score_value)
             enemyX[i] = random.randint(0,width - 65)
             enemyY[i] = random.randint(50,150)
     
+    show_score(textX,textY)
+
     pygame.display.update()
