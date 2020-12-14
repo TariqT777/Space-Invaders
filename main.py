@@ -18,7 +18,7 @@ background = pygame.image.load('Galaxy-Background.jpg')
 
 #Background Sound
 mixer.music.load('backgroundMusic.mp3')
-mixer.music.play(-1)
+mixer.music.play(-1) #We use '-1' because this will cause the sound to continually loop.
 
 #Below will be the code for the title of the game window that will be seen by the user as well as the Space Invaders icon (well the one that I am choosing to use).
 pygame.display.set_caption("Space Invaders")
@@ -131,6 +131,8 @@ while game_running:
                 playerX_movement = 1
             if event.key == pygame.K_SPACE:
                 if laser_state is 'ready':
+                    laser_sound = mixer.Sound('laserSound.wav')
+                    laser_sound.play()
                     #Gets the current x coordinate of the player
                     laserX = playerX
                     fire_laser(laserX,laserY)
@@ -180,6 +182,8 @@ while game_running:
         #Collision 
         collision = isCollision(enemyX[i],enemyY[i],laserX,laserY)
         if collision : #Means if the collision function returns true
+            hit_sound = mixer.Sound('alienHit.mp3')
+            hit_sound.play()
             laserY = 480
             laser_state = 'ready'
             score_value += 1
