@@ -1,6 +1,7 @@
 import pygame
 import random 
 import math
+from pygame import mixer
 
 #This initializes pygame
 pygame.init()
@@ -14,6 +15,10 @@ new_screen = pygame.display.set_mode((width,height))
 
 #Background
 background = pygame.image.load('Galaxy-Background.jpg')
+
+#Background Sound
+mixer.music.load('backgroundMusic.mp3')
+mixer.music.play(-1)
 
 #Below will be the code for the title of the game window that will be seen by the user as well as the Space Invaders icon (well the one that I am choosing to use).
 pygame.display.set_caption("Space Invaders")
