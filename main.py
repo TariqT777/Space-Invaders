@@ -83,6 +83,13 @@ text_font = pygame.font.Font('freesansbold.ttf',32)
 textX = 10
 textY = 10
 
+#Game Over Text
+gameOver_font = pygame.font.Font('freesansbold.ttf',64)
+
+def game_over_text():
+    over_text = gameOver_font.render("GAME OVER", True, (255,255,255))
+    new_screen.blit(over_text, (200, 250))
+
 def show_score(x,y) :
     visible_score = text_font.render("Score : " + str(score_value),True, (255,255,255))
     new_screen.blit(visible_score, (x, y))
@@ -169,6 +176,13 @@ while game_running:
 
     #### Enemy Movement Below
     for i in range(num_of_enemies):
+        #The next few lines will help us to register when a player has lost, thus prompting a game over.
+        if enemyY[i] > 440 :
+            for j in range(num_of_enemies):
+                enemyY[j] = 2000
+            game_over_text()
+            break
+        
         enemyX[i] += enemyX_movement[i]
 
         if enemyX[i] <= 0:
